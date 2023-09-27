@@ -1,5 +1,8 @@
 package com.example.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,15 +11,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.entity.Item;
 import com.example.form.ItemForm;
+import com.example.service.ItemService;
 
 @Controller
 @RequestMapping("/item")
 public class ItemController {
+	
+	private final ItemService itemService;
+
+    @Autowired
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
 
     // 商品一覧の表示
     @GetMapping
     public String index(Model model) {
+    	// データの疎通確認
+        List<Item> items = this.itemService.findAll();
+        // コンソールよりListの中身を確認する
+        System.out.println(items.toString());
         return "item/index";
     }
 
