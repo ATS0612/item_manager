@@ -1,11 +1,66 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{layout/base :: layout(~{::title}, ~{::link}, ~{::body/content()})}">
+
 <head>
-    <meta charset="UTF-8">
-    <!-- HTMLごとに利用ページの項目を入れておく -->
-    <title>商品一覧表示</title>
+	<meta charset="UTF-8">
+	<!-- HTMLごとに利用ページの項目を入れておく -->
+	<title>商品一覧表示</title>
+	<!-- index.html用のCSSファイルを読み込んでおく -->
+  <link rel="stylesheet" href="/css/item/index.css">
 </head>
+
 <body>
-    <h1>商品一覧表示</h1>
+	<h1>商品一覧表示</h1>
+<!--	<div>-->
+<!--		 新規登録ページにアクセス -->
+<!--		<a href="/item/toroku">新規登録</a>-->
+<!--	</div>-->
+	
+	<table>
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>商品名</th>
+				<th>価格</th>
+				<th>在庫数</th>
+				<th>カテゴリ</th>
+				<th></th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<!-- th:each="子要素で使う変数名 : ${List型の変数}" -->
+			<tr th:each="item : ${items}">
+				<td th:text="${item.id}"></td>
+				<td th:text="${item.name}"></td>
+				<td th:text="${item.price}"></td>
+				<td th:text="${item.stock}"></td>
+				<td th:text="${item.category.name}"></td>
+				<!-- 入出荷ボタンの追加 -->
+					<td>
+						<form th:action="@{/item/stock/{id}(id=${item.id})}" method="post">
+							<input type="number" name="stock">
+							<input type="submit" name="in" value="入荷">
+							<input type="submit" name="out" value="出荷">
+						</form>
+					</td>
+				<td>
+					<!-- 編集ページにアクセスします -->
+					<form th:action="@{/item/henshu/{id}(id=${item.id})}" method="get">
+						<input type="submit" value="編集">
+					</form>
+				</td>
+				<td>
+					<!-- 削除実行フォームです -->
+					<form th:action="@{/item/sakujo/{id}(id=${item.id})}" method="post">
+						<input type="submit" value="削除">
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

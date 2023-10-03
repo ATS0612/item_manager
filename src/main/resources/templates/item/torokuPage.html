@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+			th:replace="~{layout/base :: layout(~{::title}, ~{}, ~{::body/content()})}">
 <head>
     <meta charset="UTF-8">
     <!-- HTMLごとに利用ページの項目を入れておく -->
@@ -7,5 +8,38 @@
 </head>
 <body>
     <h1>商品新規登録ページ</h1>
+    <!-- 登録処理のHTTPメソッドはPOST -->
+    <form th:action="@{/item/toroku}" th:object="${itemForm}" method="post"> <!-- actionは送信先　 -->
+        <div>
+            <label>商品名</label>
+        </div>
+        <div>
+            <!-- 商品名はtext入力、th:field属性の値は*{フィールド名} -->
+            <input type="text" th:field="*{name}" placeholder="商品名を入力してください"> <!-- fieldはDTOオブジェクト（itemFormクラス）のフィールド名name。値をvalueへセット。 -->
+        </div>
+        <div>
+            <label>価格</label>
+        </div>
+        <div>
+            <!-- 価格はnumber入力に -->
+            <input type="number" th:field="*{price}" placeholder="価格を入力してください">
+        </div>
+        <div>
+            <label>カテゴリ名</label>
+        </div>
+        <div>
+            <select th:field="*{categoryId}">
+                <!-- カテゴリ一覧から選択できるようする -->
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" name="send" value="登録する">
+        </div>
+        <div>
+            <!-- 一覧に戻る -->
+            <a href="/item">戻る</a>
+        </div>
+    </form>
 </body>
 </html>
